@@ -1,0 +1,22 @@
+﻿@model antons_auto.mvc.ViewModels.CarBrandViewModel
+
+@{
+    ViewData["Title"] = "Bilmærke";
+}
+
+<h1>Detaljer på bilmærke</h1>
+<hr />
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CarBrandID">Rediger</a> |
+    <a asp-action="Index">Tilbage til oversigt</a>
+</div>

@@ -1,0 +1,28 @@
+﻿@model antons_auto.mvc.ViewModels.CarModelViewModel
+
+@{
+    ViewData["Title"] = "Model";
+}
+
+<h1>Detaljer på model</h1>
+<hr />
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CarBrandName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CarBrandName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CarModelName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CarModelName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CarModelID">Rediger</a> |
+    <a asp-action="Index">Tilbage til oversigt</a>
+</div>

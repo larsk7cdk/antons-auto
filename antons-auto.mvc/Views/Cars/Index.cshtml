@@ -1,0 +1,66 @@
+﻿@model IEnumerable<antons_auto.mvc.ViewModels.CarViewModel>
+
+@{
+    ViewData["Title"] = "Biler";
+}
+
+<h1>Biler</h1>
+
+<p>
+    <a asp-action="Create">Opret ny bil</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarBrandName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarModelName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MileAge)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src=@Html.Encode(item.ImageUrl) asp-append-version="true" style="width: 200px; object-fit: cover">
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CarBrandName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CarModelName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MileAge)
+                </td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CarID">Rediger</a> |
+                    <a asp-action="Details" asp-route-id="@item.CarID">Detaljer</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CarID">Slet</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

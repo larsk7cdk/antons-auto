@@ -1,0 +1,39 @@
+﻿@model antons_auto.mvc.ViewModels.CarModelViewModel
+
+@{
+    ViewData["Title"] = "Model";
+}
+
+<h1>Opret ny model</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CarBrandName" class="control-label"></label>
+                <select asp-for="CarBrandID" class="form-control"
+                        asp-items="@((IEnumerable<SelectListItem>)@ViewData["CarBrands"])">
+                    <option>Vælg et bilmærke</option>
+                </select>
+                <span asp-validation-for="CarBrandID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarModelName" class="control-label"></label>
+                <input asp-for="CarModelName" class="form-control" />
+                <span asp-validation-for="CarModelName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Opret" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Tilbage til oversigt</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,56 @@
+﻿@model antons_auto.mvc.ViewModels.CarViewModel
+
+@{
+    ViewData["Title"] = "Bil";
+}
+
+<h1>Slet bil</h1>
+
+<h3>Er du sikker på du vil slette?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CarBrandName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CarBrandName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CarModelName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CarModelName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Year)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Year)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MileAge)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MileAge)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ImageUrl)
+        </dt>
+        <dd class="col-sm-10">
+            <img src=@Html.Encode(Model.ImageUrl) asp-append-version="true" style="width: 200px; object-fit: cover">
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="CarID" />
+        <input type="submit" value="Slet" class="btn btn-danger" /> |
+        <a asp-action="Index">Tilbage til oversigt</a>
+    </form>
+</div>

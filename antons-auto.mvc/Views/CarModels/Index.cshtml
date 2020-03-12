@@ -1,0 +1,42 @@
+﻿@model IEnumerable<antons_auto.mvc.ViewModels.CarModelViewModel>
+
+@{
+    ViewData["Title"] = "Model";
+}
+
+<h1>Modeller</h1>
+
+<p>
+    <a asp-action="Create">Opret ny model</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CarBrandName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarModelName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CarBrandName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CarModelName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CarModelID">Rediger</a> |
+                    <a asp-action="Details" asp-route-id="@item.CarModelID">Detaljer</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CarModelID">Slet</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,26 @@
+﻿@model antons_auto.mvc.ViewModels.CarBrandViewModel
+
+@{
+    ViewData["Title"] = "Bilmærke";
+}
+
+<h1>Slet bilmærke</h1>
+
+<h3>Er du sikker på du vil slette?</h3>
+<div>
+    <hr/>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="CarBrandID"/>
+        <input type="submit" value="Slet" class="btn btn-danger"/> |
+        <a asp-action="Index">Tilbage til oversigt</a>
+    </form>
+</div>
