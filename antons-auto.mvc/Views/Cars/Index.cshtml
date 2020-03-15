@@ -2,23 +2,8 @@
 
 @{
     ViewData["Title"] = "Biler";
+    ViewData["ShowButtons"] = true;
 }
-
-<style>
-    .card {
-        width: 300px
-    }
-
-    dt {
-        float: left;
-        clear: left;
-        width: 85px;
-    }
-
-    dd {
-        margin-left: 0;
-    }
-</style>
 
 <h1>Biler</h1>
 
@@ -29,31 +14,6 @@
 <div class="d-flex flex-column flex-lg-row">
     @foreach (var item in Model)
     {
-        <div class="card mx-2 mt-3 mt-lg-0">
-            <div class="card-header">
-                <span>@Html.DisplayFor(modelItem => item.CarBrandName) @Html.DisplayFor(modelItem => item.CarModelName)</span>
-            </div>
-            <div class="card-body pb-0">
-                <img src=@Html.Encode(item.ImageUrl) asp-append-version="true" style="max-width: 100%;">
-                <dl class="mb-0">
-                    <dt>@Html.DisplayNameFor(model => model.CarBrandName)</dt>
-                    <dd>@Html.DisplayFor(modelItem => item.CarBrandName)</dd>
-                    <dt>@Html.DisplayNameFor(model => model.CarModelName)</dt>
-                    <dd>@Html.DisplayFor(modelItem => item.CarModelName)</dd>
-                    <dt>@Html.DisplayNameFor(model => model.Year)</dt>
-                    <dd>@Html.DisplayFor(modelItem => item.Year)</dd>
-                    <dt>@Html.DisplayNameFor(model => model.Price)</dt>
-                    <dd>@Html.DisplayFor(modelItem => item.Price)</dd>
-                    <dt>@Html.DisplayNameFor(model => model.MileAge)</dt>
-                    <dd>@Html.DisplayFor(modelItem => item.MileAge)</dd>
-                </dl>
-            </div>
-            <div class="card-footer d-flex justify-content-around">
-                <a asp-action="Edit" asp-route-id="@item.CarID" class="btn btn-warning btn-sm">Rediger</a>
-                <a asp-action="Details" asp-route-id="@item.CarID" class="btn btn-info btn-sm">Detaljer</a>
-                <a asp-action="Delete" asp-route-id="@item.CarID" class="btn btn-danger btn-sm">Slet</a>
-            </div>
-        </div>
-
+        <partial name="_CarPartial" model="item" view-data["ShowButtons"]="false"/>
     }
 </div>

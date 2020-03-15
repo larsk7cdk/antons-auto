@@ -1,9 +1,17 @@
 ﻿@{
     ViewData["Title"] = "Velkommen";
+    ViewData["ShowButtons"] = false;
 }
 
 <div class="text-center">
     <h1 class="display-4">Velkommen til Anton's Auto</h1>
     <p>Her på Anton's Auto kan du se brugte biler som er til salg</p>
-    <p>Her kommer de seneste 5 oprettede biler</p>
+</div>
+
+<h5 class="ml-2">Nyeste biler</h5>
+<div class="d-flex flex-column flex-lg-row mt-2">
+    @foreach (var item in Model)
+    {
+        <partial name="_CarPartial" model="item" view-data["ShowButtons"]="false" />
+    }
 </div>

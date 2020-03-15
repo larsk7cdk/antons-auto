@@ -1,0 +1,50 @@
+﻿@model antons_auto.mvc.ViewModels.CarViewModel
+
+@{
+    var showButtons = (bool)ViewData["ShowButtons"];
+}
+
+<style>
+    .card {
+        width: 300px
+    }
+
+    dt {
+        float: left;
+        clear: left;
+        width: 85px;
+    }
+
+    dd {
+        margin-left: 0;
+    }
+</style>
+
+<div class="card mx-2 mt-3 mt-lg-0">
+    <div class="card-header">
+        <span>@Html.DisplayFor(modelItem => Model.CarBrandName) @Html.DisplayFor(modelItem => Model.CarModelName)</span>
+    </div>
+    <div class="card-body pb-0">
+        <img src=@Html.Encode(Model.ImageUrl) asp-append-version="true" style="max-width: 100%;">
+        <dl class="mb-0">
+            <dt>@Html.DisplayNameFor(model => model.CarBrandName)</dt>
+            <dd>@Html.DisplayFor(modelItem => modelItem.CarBrandName)</dd>
+            <dt>@Html.DisplayNameFor(model => model.CarModelName)</dt>
+            <dd>@Html.DisplayFor(modelItem => modelItem.CarModelName)</dd>
+            <dt>@Html.DisplayNameFor(model => model.Year)</dt>
+            <dd>@Html.DisplayFor(modelItem => modelItem.Year)</dd>
+            <dt>@Html.DisplayNameFor(model => model.Price)</dt>
+            <dd>@Html.DisplayFor(modelItem => modelItem.Price)</dd>
+            <dt>@Html.DisplayNameFor(model => model.MileAge)</dt>
+            <dd>@Html.DisplayFor(modelItem => modelItem.MileAge)</dd>
+        </dl>
+    </div>
+    @if (showButtons)
+    {
+        <div class="card-footer d-flex justify-content-around">
+            <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning btn-sm">Rediger</a>
+            <a asp-action="Details" asp-route-id="@Model.CarID" class="btn btn-info btn-sm">Detaljer</a>
+            <a asp-action="Delete" asp-route-id="@Model.CarID" class="btn btn-danger btn-sm">Slet</a>
+        </div>
+    }
+</div>
