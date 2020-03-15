@@ -24,6 +24,7 @@ namespace antons_auto.mvc.Controllers
                 .Include(x => x.CarModel)
                 .Include(x => x.CarModel.CarBrand)
                 .OrderBy(o => o.CarModel.CarBrand.Name)
+                .AsNoTracking()
                 .Select(car => MapToViewModel(car))
                 .ToListAsync();
 
@@ -37,6 +38,7 @@ namespace antons_auto.mvc.Controllers
             var car = await _context.Cars
                 .Include(x => x.CarModel)
                 .Include(x => x.CarModel.CarBrand)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.CarID == id);
 
             if (car == null) return NotFound();
@@ -145,12 +147,14 @@ namespace antons_auto.mvc.Controllers
         private async Task ViewDataCarBrands() =>
             ViewData["CarBrands"] = new SelectList(await _context.CarBrands
                 .OrderBy(o => o.Name)
+                .AsNoTracking()
                 .ToListAsync(), "CarBrandID", "Name", "CarBrandID");
 
         private async Task ViewDataCarModels() =>
         ViewData["CarModels"] = new SelectList(await _context.CarModels
             .OrderBy(o => o.Name)
             .Select(s => new { Id = $"{s.CarBrandID}#{s.CarModelID}", s.Name })
+            .AsNoTracking()
             .ToListAsync(), "Id", "Name");
 
         private static CarViewModel MapToViewModel(Car car) => new CarViewModel

@@ -23,6 +23,7 @@ namespace antons_auto.mvc.Controllers
                 await _context.CarBrands
                     .OrderBy(o => o.Name)
                     .Select(carBrand => MapToViewModel(carBrand))
+                    .AsNoTracking()
                     .ToListAsync();
 
             return View(carBrandsViewModel);
@@ -33,6 +34,7 @@ namespace antons_auto.mvc.Controllers
             if (id == null) return NotFound();
 
             var carBrand = await _context.CarBrands
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.CarBrandID == id);
 
             if (carBrand == null) return NotFound();
