@@ -12,6 +12,7 @@ namespace antons_auto.mvc.Controllers
     public class CarsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private static string _NO_IMAGE;
 
         public CarsController(ApplicationDbContext context)
         {
@@ -20,6 +21,8 @@ namespace antons_auto.mvc.Controllers
 
         public async Task<IActionResult> Index()
         {
+            _NO_IMAGE = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}/images/image_not_available.jpg";
+
             var carsViewModel = await _context.Cars
                 .Include(x => x.CarModel)
                 .Include(x => x.CarModel.CarBrand)
@@ -83,6 +86,7 @@ namespace antons_auto.mvc.Controllers
 
             if (car == null) return NotFound();
             var carViewModel = MapToViewModel(car);
+            carViewModel.ImageUrl = carViewModel.ImageUrl.Equals(_NO_IMAGE) ? string.Empty : carViewModel.ImageUrl;
 
             return View(carViewModel);
         }
@@ -167,7 +171,7 @@ namespace antons_auto.mvc.Controllers
             Year = car.Year,
             Price = car.Price,
             MileAge = car.MileAge,
-            ImageUrl = car.ImageUrl
+            ImageUrl = car.ImageUrl ?? _NO_IMAGE
         };
 
 
@@ -176,6 +180,7 @@ namespace antons_auto.mvc.Controllers
             var carModelID = int.Parse(carViewModel.CarModelID.Contains("#")
                 ? carViewModel.CarModelID.Split("#")[1]
                 : carViewModel.CarModelID);
+
 
             return new Car
             {

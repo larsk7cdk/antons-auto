@@ -14,6 +14,8 @@ namespace antons_auto.mvc.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<HomeController> _logger;
+        private static string _NO_IMAGE;
+
 
         public HomeController(ApplicationDbContext context, ILogger<HomeController> logger)
         {
@@ -23,6 +25,8 @@ namespace antons_auto.mvc.Controllers
 
         public async Task<IActionResult> Index()
         {
+            _NO_IMAGE = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}/images/image_not_available.jpg";
+
             var carsViewModel = await _context.Cars
                 .Include(x => x.CarModel)
                 .Include(x => x.CarModel.CarBrand)
@@ -56,7 +60,7 @@ namespace antons_auto.mvc.Controllers
             Year = car.Year,
             Price = car.Price,
             MileAge = car.MileAge,
-            ImageUrl = car.ImageUrl
+            ImageUrl = car.ImageUrl ?? _NO_IMAGE
         };
 
     }

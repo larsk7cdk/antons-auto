@@ -6,7 +6,7 @@
 
 <style>
     .card {
-        width: 300px
+        width: 300px;
     }
 
     dt {
@@ -20,12 +20,14 @@
     }
 </style>
 
-<div class="card mx-2 mt-3 mt-lg-0">
+<div class="card mx-2 my-3 mt-lg-0">
     <div class="card-header">
         <span>@Html.DisplayFor(modelItem => Model.CarBrandName) @Html.DisplayFor(modelItem => Model.CarModelName)</span>
     </div>
     <div class="card-body pb-0">
-        <img src=@Html.Encode(Model.ImageUrl) asp-append-version="true" style="max-width: 100%;">
+        <div class="text-center">
+            <img src=@Html.Encode(Model.ImageUrl) asp-append-version="true" style="max-width: 100%;">
+        </div>
         <dl class="mb-0">
             <dt>@Html.DisplayNameFor(model => model.CarBrandName)</dt>
             <dd>@Html.DisplayFor(modelItem => modelItem.CarBrandName)</dd>

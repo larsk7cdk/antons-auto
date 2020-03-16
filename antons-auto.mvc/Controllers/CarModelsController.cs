@@ -73,7 +73,9 @@ namespace antons_auto.mvc.Controllers
         {
             if (id == null) return NotFound();
 
-            var carModel = await _context.CarModels.FindAsync(id);
+            var carModel = await _context.CarModels
+                  .Include(x => x.CarBrand)
+                  .FirstOrDefaultAsync(m => m.CarModelID == id);
             if (carModel == null) return NotFound();
 
             await ViewDataCarBrands();
