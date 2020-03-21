@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using antons_auto.mvc.Data;
 
 namespace antons_auto.mvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200321153526_City")]
+    partial class City
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,6 +240,7 @@ namespace antons_auto.mvc.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationDate")
@@ -249,11 +252,11 @@ namespace antons_auto.mvc.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<float>("Latitude")
-                        .HasColumnType("real");
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
 
-                    b.Property<float>("Longitude")
-                        .HasColumnType("real");
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
 
                     b.Property<int>("MileAge")
                         .HasColumnType("int");

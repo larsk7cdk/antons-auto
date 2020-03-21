@@ -8,45 +8,59 @@
 
 <div>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CarBrandName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CarBrandName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CarModelName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CarModelName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Year)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Year)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MileAge)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MileAge)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class="col-sm-10">
-            <img src=@Html.Encode(Model.ImageUrl) asp-append-version="true" style="width: 200px; object-fit: cover">
-        </dd>
-    </dl>
+    <div class="row">
+        <dl class="col-lg-6">
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CarBrandName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CarBrandName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CarModelName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CarModelName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Year)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Year)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.MileAge)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.MileAge)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.FullAddress)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FullAddress)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ImageUrl)
+            </dt>
+            <dd class="col-sm-10">
+                <img src=@Html.Encode(Model.ImageUrl) asp-append-version="true" style="width: 200px; object-fit: cover">
+            </dd>
+        </dl>
+        <div class="col-lg-6">
+            @await Html.PartialAsync("_MapsPartial", Model)
+        </div>
+        <hr />
+    </div>
 </div>
+<hr />
 <div>
     <a asp-action="Edit" asp-route-id="@Model.CarID">Rediger</a> |
     <a asp-action="Index">Tilbage til oversigt</a>

@@ -1,4 +1,5 @@
 using antons_auto.mvc.Data;
+using antons_auto.mvc.ServiceProxies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -24,10 +25,12 @@ namespace antons_auto.mvc
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("AzureConnection")));
-            
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            
+
+            services.AddTransient<IDawaServiceProxy, DawaServiceProxy>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

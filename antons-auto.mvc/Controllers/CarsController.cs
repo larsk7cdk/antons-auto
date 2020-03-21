@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using antons_auto.mvc.Data;
 using antons_auto.mvc.Data.Entities;
+using antons_auto.mvc.ServiceProxies;
 using antons_auto.mvc.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,11 +13,13 @@ namespace antons_auto.mvc.Controllers
     public class CarsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IDawaServiceProxy _dawaServiceProxy;
         private static string _NO_IMAGE;
 
-        public CarsController(ApplicationDbContext context)
+        public CarsController(ApplicationDbContext context, IDawaServiceProxy dawaServiceProxy)
         {
             _context = context;
+            _dawaServiceProxy = dawaServiceProxy;
         }
 
         public async Task<IActionResult> Index()
@@ -61,11 +64,16 @@ namespace antons_auto.mvc.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("CarId,CarBrandID,CarModelID,Year,Price,MileAge,ImageUrl")]
+            [Bind("CarId,CarBrandID,CarModelID,Year,Price,MileAge,Address,AddressNo,PostalCode,ImageUrl")]
             CarViewModel carViewModel)
         {
             if (ModelState.IsValid)
             {
+                var locationModel = _dawaServiceProxy.GetLocation(carViewModel.Address, carViewModel.AddressNo, carViewModel.PostalCode);
+                carViewModel.City = locationModel.City;
+                carViewModel.Longitude = locationModel.Longitude;
+                carViewModel.Latitude = locationModel.Latitude;
+
                 var car = MapToModel(carViewModel);
                 _context.Add(car);
                 await _context.SaveChangesAsync();
@@ -93,13 +101,18 @@ namespace antons_auto.mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CarID,CarBrandID, CarModelID,Year,Price,MileAge,ImageUrl")]
+        public async Task<IActionResult> Edit(int id, [Bind("CarID,CarBrandID, CarModelID,Year,Price,MileAge,Address,AddressNo,PostalCode,ImageUrl")]
             CarViewModel carViewModel)
         {
             if (id != carViewModel.CarID) return NotFound();
 
             if (ModelState.IsValid)
             {
+                var locationModel = _dawaServiceProxy.GetLocation(carViewModel.Address, carViewModel.AddressNo, carViewModel.PostalCode);
+                carViewModel.City = locationModel.City;
+                carViewModel.Longitude = locationModel.Longitude;
+                carViewModel.Latitude = locationModel.Latitude;
+
                 var car = MapToModel(carViewModel);
                 try
                 {
@@ -171,6 +184,13 @@ namespace antons_auto.mvc.Controllers
             Year = car.Year,
             Price = car.Price,
             MileAge = car.MileAge,
+            Address = car.Address,
+            AddressNo = car.AddressNo,
+            PostalCode = car.PostalCode,
+            City = car.City,
+            FullAddress = $"{car.Address} {car.AddressNo}, {car.City}",
+            Longitude = car.Longitude,
+            Latitude = car.Latitude,
             ImageUrl = car.ImageUrl ?? _NO_IMAGE
         };
 
@@ -189,6 +209,12 @@ namespace antons_auto.mvc.Controllers
                 Year = carViewModel.Year,
                 Price = carViewModel.Price,
                 MileAge = carViewModel.MileAge,
+                Address = carViewModel.Address,
+                AddressNo = carViewModel.AddressNo,
+                PostalCode = carViewModel.PostalCode,
+                City = carViewModel.City,
+                Longitude = carViewModel.Longitude,
+                Latitude = carViewModel.Latitude,
                 ImageUrl = carViewModel.ImageUrl
             };
         }

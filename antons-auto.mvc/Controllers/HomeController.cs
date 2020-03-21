@@ -60,8 +60,10 @@ namespace antons_auto.mvc.Controllers
             Year = car.Year,
             Price = car.Price,
             MileAge = car.MileAge,
+            FullAddress = $"{car.Address} {car.AddressNo}, {car.City}",
+            Longitude = car.Longitude,
+            Latitude = car.Latitude,
             ImageUrl = car.ImageUrl ?? _NO_IMAGE
         };
-
     }
 }

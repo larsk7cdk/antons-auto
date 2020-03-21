@@ -19,6 +19,21 @@ namespace antons_auto.mvc.Data.Entities
         [Required]
         public int MileAge { get; set; }
 
+        [Required]
+        public string Address { get; set; }
+
+        [Required]
+        public string AddressNo { get; set; }
+
+        [Required]
+        public int PostalCode { get; set; }
+
+        public string City { get; set; }
+
+        public float Longitude { get; set; }
+
+        public float Latitude { get; set; }
+
         [MaxLength(500)]
         public string ImageUrl { get; set; }
 
