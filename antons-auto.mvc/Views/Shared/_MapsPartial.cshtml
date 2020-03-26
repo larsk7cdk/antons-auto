@@ -1,36 +1,42 @@
 ﻿@model antons_auto.mvc.ViewModels.CarViewModel
 
+
+
 <style>
     #map {
+        align-items: center;
         display: flex;
         justify-content: center;
-        align-items: center;
         min-height: 50vh;
     }
 </style>
 
 <script>
     let map;
-    document.addEventListener("DOMContentLoaded", () => {
-        let s = document.createElement("script");
-        document.head.appendChild(s);
-        s.addEventListener("load", () => {
-            var pos = {
-                lat: @Model.Latitude.ToString().Replace(",","."),
-                lng: @Model.Longitude.ToString().Replace(",",".")
-                };
 
-            map = new google.maps.Map(document.getElementById("map"), {
-                center: pos,
-                zoom: 16,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            });
+    document.addEventListener("DOMContentLoaded",
+        () => {
+            const s = document.createElement("script");
+            document.head.appendChild(s);
+            s.addEventListener("load",
+                () => {
+                    var pos = {
+                        lat: @Model.Latitude.ToString().Replace(",", "."),
+                        lng: @Model.Longitude.ToString().Replace(",", ".")
+                    };
 
-            var marker = new google.maps.Marker({position: pos, map: map});
+                    map = new window.google.maps.Map(document.getElementById("map"),
+                        {
+                            center: pos,
+                            zoom: 16,
+                            mapTypeId: window.google.maps.MapTypeId.ROADMAP
+                        });
+
+                    var marker = new window.google.maps.Marker({ position: pos, map: map });
+                });
+
+            s.src = `https://maps.googleapis.com/maps/api/js?key=@ViewData["google-maps-key"]`;
         });
-
-        s.src = `https://maps.googleapis.com/maps/api/js?key={'Findes i keys.txt file'}`;
-    });
 </script>
 
 <div id="map"></div>

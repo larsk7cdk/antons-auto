@@ -16,6 +16,8 @@ namespace antons_auto.mvc.Controllers
         private readonly IDawaServiceProxy _dawaServiceProxy;
         private static string _NO_IMAGE;
 
+        private readonly string GOOGLE_MAPS_KEY = "AIzaSyArmzkH-4mqeXhynpdKa-1xRdjCTInXRzY";
+
         public CarsController(ApplicationDbContext context, IDawaServiceProxy dawaServiceProxy)
         {
             _context = context;
@@ -48,6 +50,7 @@ namespace antons_auto.mvc.Controllers
                 .FirstOrDefaultAsync(m => m.CarID == id);
 
             if (car == null) return NotFound();
+            ViewData["google-maps-key"] = GOOGLE_MAPS_KEY;
             var carViewModel = MapToViewModel(car);
 
             return View(carViewModel);
