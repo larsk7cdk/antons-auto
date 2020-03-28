@@ -18,16 +18,20 @@ namespace antons_auto.mvc.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
 
-            var carModelsViewModel = await _context.CarModels
-                .Include(x => x.CarBrand)
+            var carModels = _context.CarModels
+                .Include(x => x.CarBrand);
+
+            var carModelsSorted = FilterCarModels(carModels, sortOrder);
+
+            var carModelsViewModel = carModelsSorted
                 .Select(carModel => MapToViewModel(carModel))
-                .AsNoTracking()
-                .ToListAsync();
+                .AsNoTracking();
 
-            return View(carModelsViewModel.OrderBy(o => o.CarBrandName));
+            return View(await carModelsViewModel.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -163,5 +167,17 @@ namespace antons_auto.mvc.Controllers
             CarBrandID = carModelViewModel.CarBrandID,
             Name = carModelViewModel.CarModelName
         };
+
+        private static IQueryable<CarModel> FilterCarModels(IQueryable<CarModel> model, string sortOrder)
+        {
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    return model.OrderByDescending(o => o.CarBrand.Name);
+
+                default:
+                    return model.OrderBy(o => o.CarBrand.Name);
+            }
+        }
     }
 }

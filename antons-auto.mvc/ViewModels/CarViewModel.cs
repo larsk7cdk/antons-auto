@@ -1,5 +1,4 @@
-﻿using antons_auto.mvc.Models;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace antons_auto.mvc.ViewModels

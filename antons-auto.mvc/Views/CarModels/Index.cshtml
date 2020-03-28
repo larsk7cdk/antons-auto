@@ -13,7 +13,18 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CarBrandName)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">
+                    @Html.DisplayNameFor(model => model.CarBrandName)
+
+                    @if (@ViewData["NameSortParm"].ToString().Equals("name_desc"))
+                    {
+                        <span>(Stigende)</span>
+                    }
+                    else
+                    {
+                        <span>(Faldende)</span>
+                    }
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CarModelName)

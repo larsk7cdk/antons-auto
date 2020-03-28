@@ -5,15 +5,60 @@
     ViewData["ShowButtons"] = true;
 }
 
+<style>
+    .interaction {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .foo {
+        margin-right: 15px;
+        margin-bottom: 25px;
+        width: 300px;
+    }
+</style>
+
+
 <h1>Biler</h1>
 
 <p>
     <a asp-action="Create">Opret ny bil</a>
 </p>
 
+<section class="interaction">
+    <div class="input-group foo">
+        <select class="form-control"
+                id="SortOrderSelect" asp-items="@((IEnumerable<SelectListItem>) @ViewData["sorting"])">
+        </select>
+        <div class="input-group-append">
+            <a id="sortOrderButton" class="btn btn-outline-secondary">Sorter</a>
+        </div>
+    </div>
+    <div class="input-group foo">
+        <input type="text" class="form-control" placeholder="Søg efter bilmærke" />
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="searchButton">Søg</button>
+        </div>
+    </div>
+</section>
+
 <div class="d-flex flex-column flex-lg-row flex-wrap">
     @foreach (var item in Model)
     {
-        <partial name="_CarPartial" model="item" view-data["ShowButtons"]="false"/>
+        <partial name="_CarPartial" model="item" view-data["ShowButtons"]="false" />
     }
 </div>
+
+
+@section Scripts {
+
+    <script>
+        $(function () {
+            $("#sortOrderButton").click(function (event) {
+                const sortOrder = document.getElementById("SortOrderSelect").value;
+                window.location.href = '/cars/index?sortorder=' + sortOrder;
+            });
+        });
+    </script>
+}
