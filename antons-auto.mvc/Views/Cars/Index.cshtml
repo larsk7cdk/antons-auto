@@ -9,13 +9,8 @@
     .interaction {
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;
-    }
-
-    .foo {
-        margin-right: 15px;
         margin-bottom: 25px;
-        width: 300px;
+        max-width: 500px;
     }
 </style>
 
@@ -26,39 +21,21 @@
     <a asp-action="Create">Opret ny bil</a>
 </p>
 
-<section class="interaction">
-    <div class="input-group foo">
-        <select class="form-control"
-                id="SortOrderSelect" asp-items="@((IEnumerable<SelectListItem>) @ViewData["sorting"])">
-        </select>
-        <div class="input-group-append">
-            <a id="sortOrderButton" class="btn btn-outline-secondary">Sorter</a>
+<form asp-action="Index" method="get">
+    <section class="interaction">
+        <div class="input-group ">
+            <select class="form-control mr-2"
+                    id="SortOrderSelect" asp-items="@((IEnumerable<SelectListItem>) @ViewData["sorting"])" name="sortOrder">
+            </select>
+            <input type="text" class="form-control mr-2" name="SearchString" value="@ViewData["currentFilter"]" placeholder="Søg mærke/model" />
+            <button class="btn btn-outline-secondary" type="submit" value="Search">Opdater</button>
         </div>
+    </section>
+
+    <div class="d-flex flex-column flex-lg-row flex-wrap">
+        @foreach (var item in Model)
+        {
+            <partial name="_CarPartial" model="item" view-data["ShowButtons"]="false" />
+        }
     </div>
-    <div class="input-group foo">
-        <input type="text" class="form-control" placeholder="Søg efter bilmærke" />
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" id="searchButton">Søg</button>
-        </div>
-    </div>
-</section>
-
-<div class="d-flex flex-column flex-lg-row flex-wrap">
-    @foreach (var item in Model)
-    {
-        <partial name="_CarPartial" model="item" view-data["ShowButtons"]="false" />
-    }
-</div>
-
-
-@section Scripts {
-
-    <script>
-        $(function () {
-            $("#sortOrderButton").click(function (event) {
-                const sortOrder = document.getElementById("SortOrderSelect").value;
-                window.location.href = '/cars/index?sortorder=' + sortOrder;
-            });
-        });
-    </script>
-}
+</form>

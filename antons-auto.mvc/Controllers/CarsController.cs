@@ -8,6 +8,7 @@ using antons_auto.mvc.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace antons_auto.mvc.Controllers
 {
@@ -32,7 +33,7 @@ namespace antons_auto.mvc.Controllers
             _dawaServiceProxy = dawaServiceProxy;
         }
 
-        public async Task<IActionResult> Index(string sortOrder = "newest")
+        public async Task<IActionResult> Index(string sortOrder = "newest", string searchString = "")
         {
             _NO_IMAGE =
                 $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}/images/image_not_available.jpg";
@@ -40,12 +41,14 @@ namespace antons_auto.mvc.Controllers
             _sorting.ForEach(f => f.Selected = f.Value == sortOrder);
             ViewData["sorting"] = _sorting;
             ViewData["sortOrderSelect"] = sortOrder;
+            ViewData["currentFilter"] = searchString;
 
             var cars = _context.Cars
                 .Include(x => x.CarModel)
                 .Include(x => x.CarModel.CarBrand);
 
-            var carsSorted = FilterCars(cars, sortOrder);
+            var carsFiltered = CarsFiltered(searchString, cars);
+            var carsSorted = SortCars(carsFiltered, sortOrder);
 
             var carsViewModel = carsSorted
                 .Select(car => MapToViewModel(car))
@@ -203,19 +206,26 @@ namespace antons_auto.mvc.Controllers
                 .ToListAsync(), "Id", "Name");
         }
 
-        private static IQueryable<Car> FilterCars(IQueryable<Car> cars, string sortOrder)
+        private static IQueryable<Car> CarsFiltered(string searchString, IIncludableQueryable<Car, CarBrand> cars)
         {
-            switch (sortOrder)
+            var carsFiltered = cars.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+                carsFiltered = cars.Where(s => 
+                        s.CarModel.CarBrand.Name.Contains(searchString) ||
+                        s.CarModel.Name.Contains(searchString));
+
+            return carsFiltered;
+        }
+
+        private static IQueryable<Car> SortCars(IQueryable<Car> cars, string sortOrder)
+        {
+            return sortOrder switch
             {
-                case "newest":
-                    return cars.OrderBy(o => o.CreationDate);
-
-                case "price":
-                    return cars.OrderBy(o => o.Price);
-
-                default:
-                    return cars.OrderBy(o => o.CarModel.CarBrand.Name);
-            }
+                "newest" => cars.OrderBy(o => o.CreationDate),
+                "price" => cars.OrderBy(o => o.Price),
+                _ => cars.OrderBy(o => o.CarModel.CarBrand.Name)
+            };
         }
 
         private static CarViewModel MapToViewModel(Car car)
