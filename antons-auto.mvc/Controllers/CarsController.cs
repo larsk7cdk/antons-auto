@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using antons_auto.mvc.Data;
 using antons_auto.mvc.Data.Entities;
 using antons_auto.mvc.ServiceProxies;
+using antons_auto.mvc.Shared;
 using antons_auto.mvc.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,7 +15,10 @@ namespace antons_auto.mvc.Controllers
 {
     public class CarsController : Controller
     {
-        private static string _NO_IMAGE;
+        private const int PAGE_SIZE = 3;
+        private const string GOOGLE_MAPS_KEY = "AIzaSyArmzkH-4mqeXhynpdKa-1xRdjCTInXRzY";
+        private static string _noImage;
+
         private readonly ApplicationDbContext _context;
         private readonly IDawaServiceProxy _dawaServiceProxy;
 
@@ -25,36 +29,39 @@ namespace antons_auto.mvc.Controllers
             new SelectListItem {Value = "price", Text = "Pris", Selected = false}
         };
 
-        private readonly string GOOGLE_MAPS_KEY = "AIzaSyArmzkH-4mqeXhynpdKa-1xRdjCTInXRzY";
-
         public CarsController(ApplicationDbContext context, IDawaServiceProxy dawaServiceProxy)
         {
             _context = context;
             _dawaServiceProxy = dawaServiceProxy;
         }
 
-        public async Task<IActionResult> Index(string sortOrder = "newest", string searchString = "")
+        public async Task<IActionResult> Index(
+            string sortOrder = "newest",
+            string searchString = "",
+            int pageNumber = 1)
         {
-            _NO_IMAGE =
+            _noImage =
                 $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}/images/image_not_available.jpg";
 
             _sorting.ForEach(f => f.Selected = f.Value == sortOrder);
-            ViewData["sorting"] = _sorting;
-            ViewData["sortOrderSelect"] = sortOrder;
-            ViewData["currentFilter"] = searchString;
+
 
             var cars = _context.Cars
                 .Include(x => x.CarModel)
                 .Include(x => x.CarModel.CarBrand);
 
             var carsFiltered = CarsFiltered(searchString, cars);
-            var carsSorted = SortCars(carsFiltered, sortOrder);
+            var carsSorted = SortCars(carsFiltered, sortOrder).AsNoTracking();
+            var paginatedList = await PaginatedList<Car>.CreateAsync(carsSorted, pageNumber, PAGE_SIZE);
+            var carsViewModel = paginatedList.Select(MapToViewModel);
 
-            var carsViewModel = carsSorted
-                .Select(car => MapToViewModel(car))
-                .AsNoTracking();
+            ViewData["sorting"] = _sorting;
+            ViewData["sortOrderSelect"] = sortOrder;
+            ViewData["currentFilter"] = searchString;
+            ViewData["pages"] = carsSorted.Count() / PAGE_SIZE;
+            ViewData["pageIndex"] = pageNumber;
 
-            return View(await carsViewModel.ToListAsync());
+            return View(carsViewModel);
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -116,7 +123,7 @@ namespace antons_auto.mvc.Controllers
 
             if (car == null) return NotFound();
             var carViewModel = MapToViewModel(car);
-            carViewModel.ImageUrl = carViewModel.ImageUrl.Equals(_NO_IMAGE) ? string.Empty : carViewModel.ImageUrl;
+            carViewModel.ImageUrl = carViewModel.ImageUrl.Equals(_noImage) ? string.Empty : carViewModel.ImageUrl;
 
             return View(carViewModel);
         }
@@ -211,7 +218,7 @@ namespace antons_auto.mvc.Controllers
             var carsFiltered = cars.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
-                carsFiltered = cars.Where(s => 
+                carsFiltered = cars.Where(s =>
                         s.CarModel.CarBrand.Name.Contains(searchString) ||
                         s.CarModel.Name.Contains(searchString));
 
@@ -247,7 +254,7 @@ namespace antons_auto.mvc.Controllers
                 FullAddress = $"{car.Address} {car.AddressNo}, {car.City}",
                 Longitude = car.Longitude,
                 Latitude = car.Latitude,
-                ImageUrl = car.ImageUrl ?? _NO_IMAGE
+                ImageUrl = car.ImageUrl ?? _noImage
             };
         }
 

@@ -35,7 +35,29 @@
     <div class="d-flex flex-column flex-lg-row flex-wrap">
         @foreach (var item in Model)
         {
-            <partial name="_CarPartial" model="item" view-data["ShowButtons"]="false" />
+            <partial name="_CarPartial" model="item" view-data[ShowButtons]="false" />
         }
     </div>
+
+    @{
+        var prevDisabled = int.Parse(ViewData["pageIndex"].ToString()).Equals(1) ? "disabled" : "";
+        var nextDisabled =
+                ViewData["pageIndex"].Equals(ViewData["pages"]) ||
+                ViewData["pages"].Equals(0) ? "disabled" : "";
+    }
+
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["sortOrderSelect"]"
+       asp-route-pageNumber=@(int.Parse(ViewData["pageIndex"].ToString()) - 1)
+       asp-route-searchString="@ViewData["currentFilter"]"
+       class="btn btn-outline-secondary @prevDisabled">
+        Forrige
+    </a>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["sortOrderSelect"]"
+       asp-route-pageNumber=@(int.Parse(ViewData["pageIndex"].ToString()) + 1)
+       asp-route-searchString="@ViewData["currentFilter"]"
+       class="btn btn-outline-secondary @nextDisabled">
+        Næste
+    </a>
 </form>
