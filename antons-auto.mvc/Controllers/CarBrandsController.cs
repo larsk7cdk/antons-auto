@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using antons_auto.mvc.Data;
 using antons_auto.mvc.Data.Entities;
+using antons_auto.mvc.Shared;
 using antons_auto.mvc.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ namespace antons_auto.mvc.Controllers
 {
     public class CarBrandsController : Controller
     {
+        private const int PAGE_SIZE = 3;
         private readonly ApplicationDbContext _context;
 
         public CarBrandsController(ApplicationDbContext context)
@@ -17,14 +20,18 @@ namespace antons_auto.mvc.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1)
         {
-            var carBrandsViewModel =
-                await _context.CarBrands
+            var carBrands =
+                 _context.CarBrands
                     .OrderBy(o => o.Name)
-                    .Select(carBrand => MapToViewModel(carBrand))
-                    .AsNoTracking()
-                    .ToListAsync();
+                    .AsNoTracking();
+
+            var paginatedList = await PaginatedList<CarBrand>.CreateAsync(carBrands, pageNumber, PAGE_SIZE);
+            var carBrandsViewModel = paginatedList.Select(MapToViewModel);
+
+            ViewData["pages"] = (int)(Math.Ceiling((decimal)carBrands.Count() / (decimal)PAGE_SIZE));
+            ViewData["pageIndex"] = pageNumber;
 
             return View(carBrandsViewModel);
         }

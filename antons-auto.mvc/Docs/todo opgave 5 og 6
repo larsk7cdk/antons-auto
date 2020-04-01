@@ -4,7 +4,7 @@ Opgave 5 + Opgave 6:
 - OK - Det skal være muligt at sortere liste visning af bilmærker, ved at trykke på kolonnens navn. Er der eksempelvis en kolonne, med overskriften "Bilmærke navn", skal man kunne klikke på denne, hvorefter visning af alle mærker sorteres alfabetisk og omvendt alfabetisk ved endnu et klik.
 - OK - Som i ovenstående punkt, skal det være muligt at sortere visning af listen over modeller.
 - OK - Man skal kunne søge på liste visnings side af hhv. mærke og model. Du skal altså implementere et søgefelt med tilhørende søgefunktion.
-- Man skulle have paging knapper og funktionalitet på både bilmærke liste side og bilmodel liste side.
+- OK - Man skulle have paging knapper og funktionalitet på både bilmærke liste side og bilmodel liste side.
 - Der skal være en About page. Her har du frit slag. Lav den lækker. Brug al den viden, du har etableret omrking eksemeplvis bootstrap, styling, javascript, .NET Core og EF.
 
 

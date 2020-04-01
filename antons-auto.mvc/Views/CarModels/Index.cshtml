@@ -9,20 +9,22 @@
 <p>
     <a asp-action="Create">Opret ny bilmodel</a>
 </p>
+
 <table class="table table-striped">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">
-                    @Html.DisplayNameFor(model => model.CarBrandName)
+                <a asp-action="Index" asp-route-sortOrder=@(ViewData["NameSortParm"].ToString().Equals("") ? "name_desc" : "" )>
+                    @Html.DisplayNameFor(model =>
+                     model.CarBrandName)
 
                     @if (@ViewData["NameSortParm"].ToString().Equals("name_desc"))
                     {
-                        <span>(Stigende)</span>
+                        <span>(Faldende)</span>
                     }
                     else
                     {
-                        <span>(Faldende)</span>
+                        <span>(Stigende)</span>
                     }
                 </a>
             </th>
@@ -51,3 +53,23 @@
         }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = int.Parse(ViewData["pageIndex"].ToString()).Equals(1) ? "disabled" : "";
+    var nextDisabled =
+        ViewData["pageIndex"].Equals(ViewData["pages"]) ||
+        ViewData["pages"].Equals(0) ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["NameSortParm"]"
+   asp-route-pageNumber=@(int.Parse(ViewData["pageIndex"].ToString()) - 1)
+   class="btn btn-outline-secondary @prevDisabled">
+    Forrige
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["NameSortParm"]"
+   asp-route-pageNumber=@(int.Parse(ViewData["pageIndex"].ToString()) + 1)
+   class="btn btn-outline-secondary @nextDisabled">
+    Næste
+</a>

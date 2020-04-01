@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using antons_auto.mvc.Data;
 using antons_auto.mvc.Data.Entities;
+using antons_auto.mvc.Shared;
 using antons_auto.mvc.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +13,7 @@ namespace antons_auto.mvc.Controllers
 {
     public class CarModelsController : Controller
     {
+        private const int PAGE_SIZE = 3;
         private readonly ApplicationDbContext _context;
 
         public CarModelsController(ApplicationDbContext context)
@@ -18,20 +21,20 @@ namespace antons_auto.mvc.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder = "", int pageNumber = 1)
         {
-            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-
             var carModels = _context.CarModels
                 .Include(x => x.CarBrand);
 
-            var carModelsSorted = FilterCarModels(carModels, sortOrder);
+            var carModelsSorted = FilterCarModels(carModels, sortOrder).AsNoTracking();
+            var paginatedList = await PaginatedList<CarModel>.CreateAsync(carModelsSorted, pageNumber, PAGE_SIZE);
+            var carModelsViewModel = paginatedList.Select(MapToViewModel);
 
-            var carModelsViewModel = carModelsSorted
-                .Select(carModel => MapToViewModel(carModel))
-                .AsNoTracking();
+            ViewData["NameSortParm"] = sortOrder;
+            ViewData["pages"] = (int)(Math.Ceiling((decimal)carModelsSorted.Count() / (decimal)PAGE_SIZE));
+            ViewData["pageIndex"] = pageNumber;
 
-            return View(await carModelsViewModel.ToListAsync());
+            return View(carModelsViewModel);
         }
 
         public async Task<IActionResult> Details(int? id)

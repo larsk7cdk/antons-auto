@@ -11,26 +11,44 @@
 </p>
 <table class="table table-striped">
     <thead>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th></th>
-    </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CarBrandID" class="btn btn-sm btn-warning">Rediger</a> |
-                <a asp-action="Details" asp-route-id="@item.CarBrandID" class="btn btn-sm btn-info">Detaljer</a> |
-                <a asp-action="Delete" asp-route-id="@item.CarBrandID" class="btn btn-sm btn-danger">Slet</a>
-            </td>
-        </tr>
-    }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CarBrandID" class="btn btn-sm btn-warning">Rediger</a> |
+                    <a asp-action="Details" asp-route-id="@item.CarBrandID" class="btn btn-sm btn-info">Detaljer</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CarBrandID" class="btn btn-sm btn-danger">Slet</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = int.Parse(ViewData["pageIndex"].ToString()).Equals(1) ? "disabled" : "";
+    var nextDisabled =
+        ViewData["pageIndex"].Equals(ViewData["pages"]) ||
+        ViewData["pages"].Equals(0) ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-pageNumber=@(int.Parse(ViewData["pageIndex"].ToString()) - 1)
+   class="btn btn-outline-secondary @prevDisabled">
+    Forrige
+</a>
+<a asp-action="Index"
+   asp-route-pageNumber=@(int.Parse(ViewData["pageIndex"].ToString()) + 1)
+   class="btn btn-outline-secondary @nextDisabled">
+    Næste
+</a>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using antons_auto.mvc.Data;
@@ -58,7 +59,7 @@ namespace antons_auto.mvc.Controllers
             ViewData["sorting"] = _sorting;
             ViewData["sortOrderSelect"] = sortOrder;
             ViewData["currentFilter"] = searchString;
-            ViewData["pages"] = carsSorted.Count() / PAGE_SIZE;
+            ViewData["pages"] = (int)(Math.Ceiling((decimal)carsSorted.Count() / (decimal)PAGE_SIZE));
             ViewData["pageIndex"] = pageNumber;
 
             return View(carsViewModel);
