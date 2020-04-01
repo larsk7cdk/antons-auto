@@ -16,7 +16,7 @@ namespace antons_auto.mvc.Controllers
 {
     public class CarsController : Controller
     {
-        private const int PAGE_SIZE = 3;
+        private const int PAGE_SIZE = 6;
         private const string GOOGLE_MAPS_KEY = "AIzaSyArmzkH-4mqeXhynpdKa-1xRdjCTInXRzY";
         private static string _noImage;
 
