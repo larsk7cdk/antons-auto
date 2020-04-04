@@ -26,7 +26,7 @@ namespace antons_auto.mvc.Controllers
             var carModels = _context.CarModels
                 .Include(x => x.CarBrand);
 
-            var carModelsSorted = FilterCarModels(carModels, sortOrder).AsNoTracking();
+            var carModelsSorted = SortCarModels(carModels, sortOrder).AsNoTracking();
             var paginatedList = await PaginatedList<CarModel>.CreateAsync(carModelsSorted, pageNumber, PAGE_SIZE);
             var carModelsViewModel = paginatedList.Select(MapToViewModel);
 
@@ -171,16 +171,13 @@ namespace antons_auto.mvc.Controllers
             Name = carModelViewModel.CarModelName
         };
 
-        private static IQueryable<CarModel> FilterCarModels(IQueryable<CarModel> model, string sortOrder)
+        private static IQueryable<CarModel> SortCarModels(IQueryable<CarModel> model, string sortOrder)
         {
-            switch (sortOrder)
+            return sortOrder switch
             {
-                case "name_desc":
-                    return model.OrderByDescending(o => o.CarBrand.Name);
-
-                default:
-                    return model.OrderBy(o => o.CarBrand.Name);
-            }
+                "name_desc" => model.OrderByDescending(o => o.CarBrand.Name),
+                _ => model.OrderBy(o => o.CarBrand.Name)
+            };
         }
     }
 }

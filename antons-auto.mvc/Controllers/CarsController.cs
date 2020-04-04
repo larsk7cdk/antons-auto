@@ -208,7 +208,6 @@ namespace antons_auto.mvc.Controllers
         private async Task ViewDataCarModels()
         {
             ViewData["CarModels"] = new SelectList(await _context.CarModels
-                .OrderBy(o => o.Name)
                 .Select(s => new { Id = $"{s.CarBrandID}#{s.CarModelID}", s.Name })
                 .AsNoTracking()
                 .ToListAsync(), "Id", "Name");

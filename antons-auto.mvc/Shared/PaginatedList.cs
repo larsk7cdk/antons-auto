@@ -8,21 +8,17 @@ namespace antons_auto.mvc.Shared
 {
     public class PaginatedList<T> : List<T>
     {
-        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
-        {
-            PageIndex = pageIndex;
-            TotalPages = (int) Math.Ceiling(count / (double) pageSize);
-
-            AddRange(items);
-        }
-
         public int PageIndex { get; }
         public int TotalPages { get; }
 
-        public bool HasPreviousPage => PageIndex > 1;
+        public PaginatedList(IEnumerable<T> items, int count, int pageIndex, int pageSize)
+        {
+            PageIndex = pageIndex;
+            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
 
-        public bool HasNextPage => PageIndex < TotalPages;
-
+            AddRange(items);
+        }
+        
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
         {
             var count = await source.CountAsync();
