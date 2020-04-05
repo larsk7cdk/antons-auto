@@ -1,7 +1,42 @@
-﻿@{
+﻿@model IEnumerable<string>
+
+@{
     ViewData["Title"] = "Om";
 }
 
-<h1>Om Anton's Auto</h1>
+<style>
+    .carousel {
+        max-width: 300px
+    }
+</style>
 
-<p>Her beskrives lidt om hvorfor jeg har lavet Anton's Auto</p>
+<h1>Anton's Auto</h1>
+
+
+<section class="row">
+    <div class="col-12 col-md-6">
+        <h3>Firma info</h3>
+        <p>Anton's Auto</p>
+        <p>Antons vej</p>
+        <p>9999 Antons by</p>
+        <p>11 22 33 44</p>
+    </div>
+    <div class="col-12 col-md-6">
+        <div class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                @{
+                    var firstDone = false;
+                    foreach (var imageUrl in @Model)
+                    {
+                        <div class='carousel-item @(!firstDone ? "active" : "")'>
+                            <img src="@imageUrl" class="d-block w-100" alt="Bil">
+                        </div>
+
+                        firstDone = true;
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+</section>
